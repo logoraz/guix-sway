@@ -8,8 +8,12 @@
   #:use-module (nongnu packages linux)
   #:use-module (nongnu system linux-initrd))
 
+(use-system-modules keyboard)
 (use-service-modules cups ssh desktop xorg guix)
 (use-package-modules ssh cups certs suckless)
+
+(define %base-keyboard-layout
+  (keyboard-layout "us"))
 
 ;; System Services
 ;; Use Package substitutes instead of compiling everything & specify channels
@@ -35,7 +39,7 @@
   (cons*
    (set-xorg-configuration
     (xorg-configuration
-     (keyboard-layout keyboard-layout)))
+     (keyboard-layout %base-keyboard-layout)))
    (service screen-locker-service-type
             (screen-locker-configuration
              (name "slock")
@@ -65,7 +69,7 @@
    (host-name "locutus")
    (timezone "America/Los-Angeles")
    (locale "en_US.utf8")
-   (keyboard-layout (keyboard-layout "us"))
+   (keyboard-layout %base-keyboard-layout)
 
    (kernel linux)
    (firmware (list linux-firmware))

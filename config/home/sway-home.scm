@@ -19,7 +19,7 @@
                      password-utils pdf pulseaudio shellutils ssh syncthing video
                      web-browsers wget xdisorg xorg
 
-                     guile guile-xyz sdl gnucash gimp inkscape graphics)
+                     guile guile-xyz sdl gnucash gimp inkscape graphics terminals)
 
 (define sway-config
   (map
@@ -30,6 +30,7 @@
     "include \"~/.config/sway/before-config\""
     "bindsym $mod+space exec fuzzel -w 50 -x 8 -y 8 -r 3 -b 232635ff -t A6Accdff -s A6Accdff -S 232635ff -C c792eacc -m c792eacc -f \"JetBrains Mono:weight=light:size=10\" --no-fuzzy"
     "exec mako --border-radius=2 --font=\"JetBrains Mono 8\" --max-visible=5 --outer-margin=5 --margin=3 --background=\"#1c1f26\" --border-color=\"#89AAEB\" --border-size=1 --default-timeout=7000"
+    "output \"*\" bg ~/Pictures/wallpapers/sunset-mountain.jpg fill"
     "exec nm-applet --indicator"
     "exec emacs"
     "include \"~/.config/sway/after-config\"")))
@@ -89,6 +90,7 @@
          alsa-utils
          pavucontrol
          ;; Applications
+         foot
          gnucash   ;;|--> gnu packages gnucash
          gimp      ;;|--> gnu packages gimp
          inkscape  ;;|--> gnu packages inkscape
@@ -145,9 +147,8 @@
 
    (services (list
               (service home-dbus-service-type) ;; for bluetooth --> system
-              (service home-xdg-configuration-files-service-type
-                       `(("sway/config" ,(apply mixed-text-file (cons "sway-config" sway-config)))))
-
+              ;; (service home-xdg-configuration-files-service-type
+              ;;          `(("sway/config" ,(apply mixed-text-file (cons "sway-config" sway-config)))))
               (simple-service 'home-impure-symlinks-dotfiles
                               home-impure-symlinks-service-type
                               `( ;; guix Configuration Scaffolding
@@ -155,11 +156,21 @@
                                  ,(string-append
                                    *home-path*
                                    "config/system/channels.scm"))
+                                ;; Sway Configuration Scaffolding
+                                (".config/sway"
+                                 ,(string-append
+                                   *home-path*
+                                   "files/sway"))
                                 ;; Emacs Configuration Scaffolding
                                 (".config/emacs"
                                  ,(string-append
                                    *home-path*
                                    "files/emacs"))
+                                ;; Foot Configuration
+                                (".config/foot"
+                                 ,(string-append
+                                   *home-path*
+                                   "files/foot"))
                                 ;; Nyxt Configuration Scaffolding
                                 (".config/nyxt"
                                  ,(string-append

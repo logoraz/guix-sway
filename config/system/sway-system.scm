@@ -1,0 +1,111 @@
+(define-module (config system sway-system)
+  #:use-module (gnu)
+  #:use-module (gnu system nss)
+  #:use-module (guix)
+  #:use-module (guix packages)
+  #:use-module (guix download)
+  #:use-module (guix ci)
+  #:use-module (nongnu packages linux)
+  #:use-module (nongnu system linux-initrd))
+
+(use-service-modules cups ssh desktop xorg guix)
+(use-package-modules ssh cups certs suckless)
+
+;; System Services
+;; Use Package substitutes instead of compiling everything & specify channels
+;; https://guix.gnu.org/manual/en/html_node/Getting-Substitutes-from-Other-Servers.html
+(define (substitutes->services config)
+  (guix-configuration
+   (inherit config)
+   (substitute-urls
+    (cons* "https://substitutes.nonguix.org"
+           "https://ci.guix.gnu.org"
+           %default-substitute-urls))
+   (authorized-keys
+    (cons* (origin
+            (method url-fetch)
+            (uri "https://substitutes.nonguix.org/signing-key.pub")
+            (file-name "nonguix.pub")
+            (sha256
+             (base32
+              "0j66nq1bxvbxf5n8q2py14sjbkn57my0mjwq7k1qm9ddghca7177")))
+           %default-authorized-guix-keys))))
+
+(define guix-system-services
+  (cons*
+   (set-xorg-configuration
+    (xorg-configuration
+     (keyboard-layout keyboard-layout)))
+   (service screen-locker-service-type
+            (screen-locker-configuration
+             (name "slock")
+             (program (file-append slock "/bin/slock"))))
+   ;; See: https://guix.gnu.org/manual/en/html_node/Desktop-Services.html
+   (service bluetooth-service-type
+            (bluetooth-configuration
+             (auto-enable? #f)))
+   (service cups-service-type
+            (cups-configuration
+             (web-interface? #t)
+             (default-paper-size "Letter")
+             (extensions (list cups-filters hplip-minimal))))
+   ;; ssh user@host -p 2222
+   (service openssh-service-type
+            (openssh-configuration
+             (openssh openssh)
+             (port-number 2222)))
+   (modify-services %desktop-services
+                    (guix-service-type
+                     config =>
+                     (substitutes->services config)))))
+
+
+(define os-config
+  (operating-system
+   (host-name "locutus")
+   (timezone "America/Los-Angeles")
+   (locale "en_US.utf8")
+   (keyboard-layout (keyboard-layout "us"))
+
+   (kernel linux)
+   (firmware (list linux-firmware))
+   ;; Fixes Xorg Lag - https://gitlab.com/nonguix/nonguix/-/issues/212
+   (initrd microcode-initrd)
+   (kernel-arguments (cons "i915.enable_psr=0" %default-kernel-arguments))
+
+   (bootloader (bootloader-configuration
+                (bootloader grub-efi-bootloader)
+                (targets '("/boot/efi"))))
+
+   (swap-devices (list (swap-space
+                        (target
+                         (uuid
+			  "b547f9c1-9a69-4c63-9c55-edc2736bf504")))))
+
+   ;; Use 'blkid' to find unique file system identifiers ("UUIDs").
+   (file-systems (append
+                  (list (file-system
+                         (mount-point  "/boot/efi")
+                         (device (uuid "F8E9-9C22" 'fat32))
+                         (type "vfat"))
+                        (file-system
+                         (mount-point "/")
+                         (device (uuid "c0ffc6f4-dab7-4efc-8cdd-3e9d727b91ab" 'ext4))
+                         (type "ext4")))
+		  %base-file-systems))
+
+   (users (append
+           (list (user-account
+                  (name "logoraz")
+                  (comment "Erik P. Almaraz")
+                  (group "users")
+                  (home-directory "/home/logoraz")
+                  (supplementary-groups '("wheel" "netdev" "audio" "video" "lp"))))
+           %base-user-accounts))
+
+   (services guix-system-services)
+
+   ;; Allow resolution of '.local' host names with mDNS.
+   (name-service-switch %mdns-host-lookup-nss)))
+
+os-config

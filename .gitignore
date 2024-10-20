@@ -1,0 +1,9 @@
+# Main
+
+# Emacs
+/files/emacs/etc/
+/files/emacs/var/
+/files/emacs/elisp/
+
+# Nyxt
+#/files/extensions/tbd

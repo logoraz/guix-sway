@@ -21,8 +21,6 @@
 
                      guile guile-xyz sdl gnucash gimp inkscape graphics)
 
-(define user-name "logoraz")
-
 (define sway-config
   (map
    (lambda (str)
@@ -52,8 +50,7 @@
         sdl2))
 
 (define sway-packages
-  (list  sway
-         swaybg
+  (list  swaybg
          swayidle
          swaylock
          fuzzel
@@ -76,7 +73,7 @@
          xdg-utils ;; For xdg-open, etc
          xdg-dbus-proxy
          shared-mime-info
-         (list glib "bin")
+         ;; (list glib "bin")
          ;; Appearance
          gnome-themes-extra
          adwaita-icon-theme
@@ -193,5 +190,6 @@
                                            #:recursive? #t)))
                         (bash-profile
                          (list (local-file "dot-bash_profile.sh"
-                                           #:recursive? #t)))))
-              ))))
+                                           #:recursive? #t)))))))))
+
+home-config

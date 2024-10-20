@@ -9,8 +9,8 @@
   #:use-module (nongnu system linux-initrd))
 
 (use-system-modules keyboard)
-(use-service-modules cups ssh desktop xorg guix)
-(use-package-modules ssh cups certs suckless)
+(use-service-modules cups ssh desktop guix)
+(use-package-modules ssh cups certs suckless wm glib)
 
 (define %base-keyboard-layout
   (keyboard-layout "us"))
@@ -37,13 +37,6 @@
 
 (define guix-system-services
   (cons*
-   (set-xorg-configuration
-    (xorg-configuration
-     (keyboard-layout %base-keyboard-layout)))
-   (service screen-locker-service-type
-            (screen-locker-configuration
-             (name "slock")
-             (program (file-append slock "/bin/slock"))))
    ;; See: https://guix.gnu.org/manual/en/html_node/Desktop-Services.html
    (service bluetooth-service-type
             (bluetooth-configuration
@@ -58,13 +51,13 @@
             (openssh-configuration
              (openssh openssh)
              (port-number 2222)))
-   %desktop-services
-   ;; (modify-services %desktop-services
-   ;;                  (guix-service-type
-   ;;                   config =>
-   ;;                   (substitutes->services config)))
-   ))
+   (modify-services %desktop-services
+                    (guix-service-type
+                     config =>
+                     (substitutes->services config)))))
 
+
+(define user-name "logoraz")
 
 (define os-config
   (operating-system
@@ -102,13 +95,18 @@
 
    (users (append
            (list (user-account
-                  (name "logoraz")
+                  (name user-name)
                   (comment "Erik P. Almaraz")
                   (group "users")
                   (home-directory "/home/logoraz")
                   (supplementary-groups '("wheel" "netdev" "audio" "video" "lp"))))
            %base-user-accounts))
 
+   (packages (append
+	      (list sway
+		    (list glib "bin"))
+	      %base-packages))
+   
    (services guix-system-services)
 
    ;; Allow resolution of '.local' host names with mDNS.

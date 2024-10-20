@@ -58,16 +58,18 @@
             (openssh-configuration
              (openssh openssh)
              (port-number 2222)))
-   (modify-services %desktop-services
-                    (guix-service-type
-                     config =>
-                     (substitutes->services config)))))
+   %desktop-services
+   ;; (modify-services %desktop-services
+   ;;                  (guix-service-type
+   ;;                   config =>
+   ;;                   (substitutes->services config)))
+   ))
 
 
 (define os-config
   (operating-system
    (host-name "locutus")
-   (timezone "America/Los-Angeles")
+   (timezone "America/Los_Angeles")
    (locale "en_US.utf8")
    (keyboard-layout %base-keyboard-layout)
 

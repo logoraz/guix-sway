@@ -6,6 +6,7 @@
   :use-module (gnu home services gnupg)
   :use-module (gnu home services mcron)
   :use-module (gnu home services shells)
+  :use-module (gnu home services sound)
   :use-module (gnu home services desktop)
   :use-module (gnu home services dotfiles)
   :use-module (guix gexp)
@@ -19,7 +20,8 @@
                      password-utils pdf pulseaudio shellutils ssh syncthing video
                      web-browsers wget xdisorg xorg
 
-                     guile guile-xyz sdl gnucash gimp inkscape graphics terminals)
+                     guile guile-xyz sdl gnucash gimp inkscape graphics terminals
+                     image networking)
 
 (define sway-config
   (map
@@ -81,16 +83,26 @@
          ;; Fonts
          font-jetbrains-mono
          font-liberation
+         font-hack
          font-fira-code
          font-iosevka-aile
          font-google-noto
          font-google-noto-emoji
          font-google-noto-sans-cjk
          ;; Audio utils
-         alsa-utils
-         pavucontrol
+         ;; alsa-utils
+         ;; pavucontrol
+         pipewire ;;|--> gnu packages linux
+         wireplumber
+         brightnessctl
+         lm-sensors
+         blueman ;;|--> gnu packages networkings
+         bluez
+         playerctl ;;|--> gnu packages music
          ;; Applications
-         foot
+         foot      ;;|--> gnu packages terminals
+         mpv       ;;|--> gnu packages video
+         grim      ;;|--> gnu package image
          gnucash   ;;|--> gnu packages gnucash
          gimp      ;;|--> gnu packages gimp
          inkscape  ;;|--> gnu packages inkscape
@@ -146,6 +158,7 @@
                      emacs-packages))
 
    (services (list
+              (service home-pipewire-service-type)
               (service home-dbus-service-type) ;; for bluetooth --> system
               ;; (service home-xdg-configuration-files-service-type
               ;;          `(("sway/config" ,(apply mixed-text-file (cons "sway-config" sway-config)))))

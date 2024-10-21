@@ -60,8 +60,6 @@
          mako
          grimshot
          network-manager-applet
-         ;; Emacs
-         emacs-pgtk
          ;; Browser
          icecat
          (latest-nyxt nyxt)
@@ -89,6 +87,10 @@
          font-google-noto
          font-google-noto-emoji
          font-google-noto-sans-cjk
+         ;; Cursors
+         bibata-cursor-theme
+         ;; Status Bar
+         yambar-wayland
          ;; Audio utils
          ;; alsa-utils
          ;; pavucontrol
@@ -117,7 +119,7 @@
          trash-cli))
 
 (define emacs-packages
-  (list  emacs                    ;;|--> gnu packages emacs
+  (list  emacs-next-pgtk          ;;|--> gnu packages emacs
          emacs-diminish           ;;|--> gnu packages emacs-xyz
          emacs-delight
          emacs-nord-theme
@@ -174,6 +176,10 @@
                                  ,(string-append
                                    *home-path*
                                    "files/sway"))
+                                (".config/yambar"
+                                 ,(string-append
+                                   *home-path*
+                                   "files/yambar"))
                                 ;; Emacs Configuration Scaffolding
                                 (".config/emacs"
                                  ,(string-append

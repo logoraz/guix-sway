@@ -37,10 +37,6 @@
 
 (define guix-system-services
   (cons*
-   (service screen-locker-service-type
-            (screen-locker-configuration
-             (name "swaylock")
-             (program (file-append swaylock "/bin/swaylock"))))
    ;; See: https://guix.gnu.org/manual/en/html_node/Desktop-Services.html
    (service bluetooth-service-type
             (bluetooth-configuration

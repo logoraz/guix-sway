@@ -8,39 +8,51 @@ set $mod Mod4
 set $term foot
 
 # Set preferred application launcher
-set $menu wmenu-run
+# set $menu wmenu-run
 
-
-
+# Lightweight Wayland notification daemon
 exec mako --border-radius=2 --font="JetBrains Mono 8" --max-visible=5 --outer-margin=5 --margin=3 --background="#1c1f26" --border-color="#89AAEB" --border-size=1 --default-timeout=7000
 
 output "*" bg ~/Pictures/wallpapers/sunset-mountain.jpg fill
 
-exec nm-applet --indicator
+exec swayidle -w \
+  timeout 300 'swaylock -f --screenshots --clock --effect-blur 9x7 --effect-vignette 0.25:0.5 --grace 60 --fade-in 0.25' \
+  timeout 600 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
+  before-sleep 'swaylock -f --screenshots --clock --effect-blur 9x7 --effect-vignette 0.25:0.5 --grace 60 --fade-in 0.25'
+  
+# not sure why this was in David's config, doesn't do anything as it stands!
+# exec nm-applet --indicator
 
 #
 # Status Bar:
 #
+exec_always sleep 3 && sh -c "killall yambar; yambar &"
+
 # Read `man 5 sway-bar` for more information about this section.
-bar {
-    position top
+# bar {
+#     position top
 
-    # When the status_command prints a new line to stdout, swaybar updates.
-    # The default just shows the current date and time.
-    # status_command while date +'%Y-%m-%d %X'; do sleep 1; done
-    status_command while ~/.config/sway/status.sh; do sleep 1; done
+#     # When the status_command prints a new line to stdout, swaybar updates.
+#     # The default just shows the current date and time.
+#     # status_command while date +'%Y-%m-%d %X'; do sleep 1; done
+#     status_command while ~/.config/sway/status.sh; do sleep 1; done
     
-    colors {
-        statusline #ffffff
-        background #323232
-        inactive_workspace #32323200 #32323200 #5c5c5c
-    }
-    font pango:JetBrains Mono 10
-}
+#     colors {
+#         statusline #ffffff
+#         background #323232
+#         inactive_workspace #32323200 #32323200 #5c5c5c
+#     }
+#     font pango:JetBrains Mono 11
+# }
 
-exec emacs
+
+
+#exec emacs
 
 # keybindings
+
+# Start Emacs
+bindsym $mod+e exec emacs
 
 # Start terminal
 bindsym $mod+Return exec $term
@@ -135,7 +147,7 @@ bindsym $mod+v splitv
 # Switch the current container between different layout styles
 bindsym $mod+s layout stacking
 bindsym $mod+w layout tabbed
-bindsym $mod+e layout toggle split
+#bindsym $mod+e layout toggle split
 
 # Make the current focus fullscreen
 bindsym $mod+f fullscreen
@@ -187,5 +199,8 @@ bindsym --locked XF86MonBrightnessDown exec brightnessctl set 5%-
 bindsym --locked XF86MonBrightnessUp exec brightnessctl set 5%+
 # Special key to take a screenshot with grim
 bindsym Print exec grim ~/Pictures/Screenshots/
+
+# XCURSOR_THEME=Bibata-Modern-Classic
+seat * xcursor_theme Bibata-Modern-Classic 16
 
 #include "~/.config/sway/after-config"

@@ -1,4 +1,5 @@
 # Base Config for Sway
+# See: htps://github.com/daviwil/dotfiles/tree/master/.files/.config/sway/
 
 set $mod Mod4
 
@@ -23,29 +24,44 @@ exec swayidle -w \
 # not sure why this was in David's config, doesn't do anything as it stands!
 # exec nm-applet --indicator
 
+# CA lat/long
+exec wlsunset -l 34.1 -L -117.7
+
+exec_always autotiling
+
+# cleans up window appearance
+#xwayland disable
+font "JetBrains Mono" 12
+#output * scale 2
+hide_edge_borders smart
+default_border none
+
+set $bgcolor #232635dd
+
 #
 # Status Bar:
 #
-exec_always sleep 3 && sh -c "killall yambar; yambar &"
+# exec_always sleep 3 && sh -c "killall yambar; yambar &"
 
 # Read `man 5 sway-bar` for more information about this section.
-# bar {
-#     position top
+bar {
+    position top
+    # mode hide
+    font pango:JetBrains Mono 11
+    icon_theme "Papirus-Dark"
 
-#     # When the status_command prints a new line to stdout, swaybar updates.
-#     # The default just shows the current date and time.
-#     # status_command while date +'%Y-%m-%d %X'; do sleep 1; done
-#     status_command while ~/.config/sway/status.sh; do sleep 1; done
-    
-#     colors {
-#         statusline #ffffff
-#         background #323232
-#         inactive_workspace #32323200 #32323200 #5c5c5c
-#     }
-#     font pango:JetBrains Mono 11
-# }
+    # status_command while ~/.config/sway/status.sh; do sleep 1; done
+    status_command while date +'%Y-%m-%d %I:%M:%S %p W%U'; do sleep 1; done
 
+    tray_bindsym button1 Activate
+    tray_bindsym button2 ContextMenu
 
+    colors {
+        statusline #ffffff
+        background $bgcolor
+        inactive_workspace #1c1f2bef #323232CC #5c5c5c
+    }
+}
 
 #exec emacs
 
@@ -78,7 +94,9 @@ bindsym $mod+Shift+c reload
 bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
 
 # Provided by David - not sure what this does...
-bindsym $mod+space exec fuzzel -w 50 -x 8 -y 8 -r 3 -b 232635ff -t A6Accdff -s A6Accdff -S 232635ff -C c792eacc -m c792eacc -f "JetBrains Mono:weight=light:size=10" --no-fuzzy
+
+bindsym $mod+space exec fuzzel -w 50 -x 8 -y 8 -r 3 -b 232635ff -t A6Accdff -s A6Accdff -S 232635ff -C c792eacc -m c792eacc -f JetBrains Mono:weight=light:size=8
+# bindsym $mod+space exec fuzzel -w 50 -x 8 -y 8 -r 3 -b 232635ff -t A6Accdff -s A6Accdff -S 232635ff -C c792eacc -m c792eacc -f "JetBrains Mono:weight=light:size=10" --no-fuzzy
 
 
 #
@@ -198,9 +216,9 @@ bindsym --locked XF86AudioMicMute exec wpctl set-mute \@DEFAULT_AUDIO_SOURCE@ to
 bindsym --locked XF86MonBrightnessDown exec brightnessctl set 5%-
 bindsym --locked XF86MonBrightnessUp exec brightnessctl set 5%+
 # Special key to take a screenshot with grim
-bindsym Print exec grim ~/Pictures/Screenshots/
+bindsym Print exec grim
 
 # XCURSOR_THEME=Bibata-Modern-Classic
-seat * xcursor_theme Bibata-Modern-Classic 16
+seat * xcursor_theme Bibata-Modern-Classic 24
 
 #include "~/.config/sway/after-config"

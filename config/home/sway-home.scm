@@ -30,7 +30,7 @@
    (list
     "set $mod Mod4"
     "include \"~/.config/sway/before-config\""
-    "bindsym $mod+space exec fuzzel -w 50 -x 8 -y 8 -r 3 -b 232635ff -t A6Accdff -s A6Accdff -S 232635ff -C c792eacc -m c792eacc -f \"JetBrains Mono:weight=light:size=10\" --no-fuzzy"
+    "bindsym $mod+space exec fuzzel -w 50 -x 8 -y 8 -r 3 -b 232635ff -t A6Accdff -s A6Accdff -S 232635ff -C c792eacc -m c792eacc -f \"JetBrains Mono:weight=light:size=10\""
     "exec mako --border-radius=2 --font=\"JetBrains Mono 8\" --max-visible=5 --outer-margin=5 --margin=3 --background=\"#1c1f26\" --border-color=\"#89AAEB\" --border-size=1 --default-timeout=7000"
     "output \"*\" bg ~/Pictures/wallpapers/sunset-mountain.jpg fill"
     "exec nm-applet --indicator"
@@ -176,6 +176,10 @@
                                  ,(string-append
                                    *home-path*
                                    "files/sway"))
+                                (".config/gtk-3.0"
+                                 ,(string-append
+                                   *home-path*
+                                   "files/gtk-3.0/settings.ini"))
                                 (".config/yambar"
                                  ,(string-append
                                    *home-path*
@@ -206,7 +210,8 @@
                                 ;; ("XDG_SESSION_TYPE" . "x11")
                                 ;; ("XDG_SESSION_DESKOP" . "stumpwm")
                                 ;; ("XDG_CURRENT_DESKTOP" . "stumpwm")
-                                ;; ("XDG_DOWNLOAD_DIR" . "/home/logoraz/Downloads")
+                                ("XDG_DOWNLOAD_DIR" . "/home/logoraz/Downloads")
+                                ("XDG_PICTURES_DIR" . "/home/logoraz/Pictures/Screenshots")
                                 ("GUILE_WARN_DEPRECATED" . "detailed")))
               (service home-bash-service-type
                        (home-bash-configuration

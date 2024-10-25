@@ -9,19 +9,22 @@
   :use-module (gnu home services sound)
   :use-module (gnu home services desktop)
   :use-module (gnu home services dotfiles)
+  :use-module (gnu home services syncthing)
   :use-module (guix gexp)
   :use-module (guix transformations)
-  :use-module (config home services home-impure-symlinks))
+  :use-module (config home services home-files-alist)
+  :use-module (config home services home-impure-symlinks)
+  :use-module (config home services udiskie))
 
 (use-service-modules desktop guix)
 (use-package-modules bootloaders certs gnuzilla emacs emacs-xyz version-control wm
                      compression curl fonts freedesktop gimp glib gnome gnome-xyz
-                     gstreamer kde-frameworks linux music package-management
+                     gstreamer kde-frameworks linux package-management
                      password-utils pdf pulseaudio shellutils ssh syncthing video
                      web-browsers wget xdisorg xorg
 
                      guile guile-xyz sdl gnucash gimp inkscape graphics terminals
-                     image networking)
+                     image networking qt music)
 
 (define sway-config
   (map
@@ -38,46 +41,49 @@
     "include \"~/.config/sway/after-config\"")))
 
 ;;; Package Transformations
-(define latest-nyxt
-  (options->transformation
-   '((without-tests . "nyxt")
-     (with-latest   . "nyxt"))))
+;; Keep for now as an example
+;; deploy in package list as (latest-sbcl sbcl)
+;; (define latest-sbcl
+;;   (options->transformation
+;;    '((with-latest . "sbcl"))))
 
 ;;; Packages
 (define guile-packages
-  (list guile-next ;;|--> gnu packages guile
+  (list guile-next    ;;|--> gnu packages guile
         guile-ares-rs ;;|--> gnu packages guile-xyz
         guile-hoot
         guile-websocket
         guile-sdl2 ;;|--> gnu package sdl
         sdl2))
 
+;;TODO - Better organize & comment
+;; https://github.com/daviwil/dotfiles/blob/master/daviwil/home-services/desktop.scm
 (define sway-packages
   (list  swaybg
          swayidle
-         swaylock
+         wl-clipboard
          fuzzel
          mako
-         grimshot
+         grimshot ;; grimshot --notify copy area
          network-manager-applet
-         ;; Browser
-         icecat
-         (latest-nyxt nyxt)
-         gstreamer
-         gst-plugins-good
-         gst-plugins-bad
-         gst-libav
-         keepassxc
+
          ;; Compatibility for older Xorg applications
          xorg-server-xwayland
-         ;; Flatpak and XDG utilities
+
+         ;; XDG Utilities
          xdg-utils ;; For xdg-open, etc
          xdg-dbus-proxy
          shared-mime-info
-         ;; (list glib "bin")
+         udiskie
+         (list glib "bin")
+
          ;; Appearance
-         gnome-themes-extra
+         matcha-theme
+         papirus-icon-theme
          adwaita-icon-theme
+         gnome-themes-extra
+         bibata-cursor-theme
+
          ;; Fonts
          font-jetbrains-mono
          font-liberation
@@ -87,30 +93,45 @@
          font-google-noto
          font-google-noto-emoji
          font-google-noto-sans-cjk
-         ;; Cursors
-         bibata-cursor-theme
-         ;; Status Bar
-         yambar-wayland
-         ;; Audio utils
+
+         ;; Browsers
+         icecat
+         qtwayland
+         ;; (specification->package "qtwayland@5")
+         qutebrowser
+
+         ;; Authentication
+         keepassxc
+         password-store
+
+         ;; Audio devices and media playback
+         mpv      ;;|--> gnu packages video
+         mpv-mpris
+         youtube-dl
+         playerctl
+         gstreamer
+         gst-plugins-good
+         gst-plugins-bad
+         gst-libav
          ;; alsa-utils
          ;; pavucontrol
          pipewire ;;|--> gnu packages linux
          wireplumber
-         brightnessctl
+
+         ;; Applications
+         foot     ;;|--> gnu packages terminals
+         gnucash  ;;|--> gnu packages gnucash
+         gimp     ;;|--> gnu packages gimp
+         inkscape ;;|--> gnu packages inkscape
+         blender  ;;|--> gnu packages graphics
+
+         ;; General utilities
          lm-sensors
          blueman ;;|--> gnu packages networkings
          bluez
-         playerctl ;;|--> gnu packages music
-         ;; Applications
-         foot      ;;|--> gnu packages terminals
-         mpv       ;;|--> gnu packages video
-         grim      ;;|--> gnu package image
-         gnucash   ;;|--> gnu packages gnucash
-         gimp      ;;|--> gnu packages gimp
-         inkscape  ;;|--> gnu packages inkscape
-         blender   ;;|--> gnu packages graphics
-         ;; General utilities
+         brightnessctl
          git
+         (list git "send-email")
          curl
          wget
          openssh
@@ -119,8 +140,8 @@
          trash-cli))
 
 (define emacs-packages
-  (list  emacs-next-pgtk          ;;|--> gnu packages emacs
-         emacs-diminish           ;;|--> gnu packages emacs-xyz
+  (list  emacs-pgtk ;;|--> gnu packages emacs
+         emacs-diminish  ;;|--> gnu packages emacs-xyz
          emacs-delight
          emacs-nord-theme
          emacs-doom-themes
@@ -160,23 +181,28 @@
                      emacs-packages))
 
    (services (list
+              ;; Enable pipewire audio
               (service home-pipewire-service-type)
-              (service home-dbus-service-type) ;; for bluetooth --> system
+
+              ;; Enable bluetooth connections
+              (service home-dbus-service-type)
+
               ;; (service home-xdg-configuration-files-service-type
               ;;          `(("sway/config" ,(apply mixed-text-file (cons "sway-config" sway-config)))))
+
               (simple-service 'home-impure-symlinks-dotfiles
                               home-impure-symlinks-service-type
-                              `( ;; guix Configuration Scaffolding
+                              `( ;; Guix Configuration
                                 (".config/guix/channels.scm"
                                  ,(string-append
                                    *home-path*
                                    "config/system/channels.scm"))
-                                ;; Sway Configuration Scaffolding
+                                ;; Sway Configuration
                                 (".config/sway"
                                  ,(string-append
                                    *home-path*
                                    "files/sway"))
-                                (".config/gtk-3.0"
+                                (".config/gtk-3.0/settings.ini"
                                  ,(string-append
                                    *home-path*
                                    "files/gtk-3.0/settings.ini"))
@@ -184,7 +210,12 @@
                                  ,(string-append
                                    *home-path*
                                    "files/yambar"))
-                                ;; Emacs Configuration Scaffolding
+                                ;; qutebrowser Configuration
+                                (".config/qutebrowser"
+                                 ,(string-append
+                                   *home-path*
+                                   "files/qutebrowser"))
+                                ;; Emacs Configuration
                                 (".config/emacs"
                                  ,(string-append
                                    *home-path*
@@ -193,26 +224,34 @@
                                 (".config/foot"
                                  ,(string-append
                                    *home-path*
-                                   "files/foot"))
-                                ;; Nyxt Configuration Scaffolding
-                                (".config/nyxt"
-                                 ,(string-append
-                                   *home-path*
-                                   "files/nyxt"))
-                                (".local/share/nyxt/extensions"
-                                 ,(string-append
-                                   *home-path*
-                                   "files/nyxt/extensions"))))
-              (simple-service 'env-vars home-environment-variables-service-type
-                              '(("EDITOR" . "emacs")
-                                ("BROWSER" . "nyxt")
-                                ;; ("OPENER" . "opener.sh")
-                                ;; ("XDG_SESSION_TYPE" . "x11")
-                                ;; ("XDG_SESSION_DESKOP" . "stumpwm")
-                                ;; ("XDG_CURRENT_DESKTOP" . "stumpwm")
+                                   "files/foot"))))
+
+              ;; Set environment variables for every session
+              (simple-service 'profile-env-vars-service
+                              home-environment-variables-service-type
+                              '( ;; Sort hidden (dot) files first in ls listings
+                                ("LC_COLLATE" . "C")
+                                ;; Set Emacs as editor
+                                ("EDITOR" . "emacs")
+                                ("VISUAL" . "emacs")
+                                ;; Set quotebrowser as the default
+                                ("BROWSER" . "qutebrowser")
+                                ;; Set wayland-specific environment variables
+                                ("XDG_CURRENT_DESKTOP" . "sway")
+                                ("XDG_SESSION_TYPE" . "wayland")
+                                ("RTC_USE_PIPEWIRE" . "true")
+                                ("SDL_VIDEODRIVER" . "wayland")
+                                ("MOZ_ENABLE_WAYLAND" . "1")
+                                ("CLUTTER_BACKEND" . "wayland")
+                                ("ELM_ENGINE" . "wayland_egl")
+                                ("ECORE_EVAS_ENGINE" . "wayland-egl")
+                                ("QT_QPA_PLATFORM" . "wayland-egl")
+
+                                ;; Set XDG environment variables
                                 ("XDG_DOWNLOAD_DIR" . "/home/logoraz/Downloads")
                                 ("XDG_PICTURES_DIR" . "/home/logoraz/Pictures/Screenshots")
                                 ("GUILE_WARN_DEPRECATED" . "detailed")))
+
               (service home-bash-service-type
                        (home-bash-configuration
                         (guix-defaults? #f)
@@ -225,6 +264,14 @@
                                            #:recursive? #t)))
                         (bash-profile
                          (list (local-file "dot-bash_profile.sh"
-                                           #:recursive? #t)))))))))
+                                           #:recursive? #t)))))
+              ;; File synchronization
+              (service home-syncthing-service-type)
+
+              ;; Monitor battery levels
+              (service home-batsignal-service-type)
+
+              ;; Udiskie for auto-mounting
+              (service home-udiskie-service-type)))))
 
 home-config

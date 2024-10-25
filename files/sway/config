@@ -95,7 +95,7 @@ bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. 
 
 # Provided by David - not sure what this does...
 
-bindsym $mod+space exec fuzzel -w 50 -x 8 -y 8 -r 3 -b 232635ff -t A6Accdff -s A6Accdff -S 232635ff -C c792eacc -m c792eacc -f JetBrains Mono:weight=light:size=8
+bindsym $mod+space exec fuzzel -w 50 -x 8 -y 8 -r 3 -b 232635ff -t A6Accdff -s A6Accdff -S 232635ff -C c792eacc -m c792eacc -f "JetBrains Mono:weight=light:size=8"
 # bindsym $mod+space exec fuzzel -w 50 -x 8 -y 8 -r 3 -b 232635ff -t A6Accdff -s A6Accdff -S 232635ff -C c792eacc -m c792eacc -f "JetBrains Mono:weight=light:size=10" --no-fuzzy
 
 
@@ -216,9 +216,9 @@ bindsym --locked XF86AudioMicMute exec wpctl set-mute \@DEFAULT_AUDIO_SOURCE@ to
 bindsym --locked XF86MonBrightnessDown exec brightnessctl set 5%-
 bindsym --locked XF86MonBrightnessUp exec brightnessctl set 5%+
 # Special key to take a screenshot with grim
-bindsym Print exec grim
+bindsym Print exec grimshot
 
 # XCURSOR_THEME=Bibata-Modern-Classic
-seat * xcursor_theme Bibata-Modern-Classic 24
+seat * xcursor_theme Bibata-Original-Classic 16
 
 #include "~/.config/sway/after-config"

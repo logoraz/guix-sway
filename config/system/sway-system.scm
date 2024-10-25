@@ -9,7 +9,7 @@
   #:use-module (nongnu system linux-initrd))
 
 (use-system-modules keyboard)
-(use-service-modules cups ssh desktop guix)
+(use-service-modules cups ssh desktop guix xorg)
 (use-package-modules ssh cups certs suckless wm glib)
 
 (define %base-keyboard-layout
@@ -38,9 +38,15 @@
 (define guix-system-services
   (cons*
    ;; See: https://guix.gnu.org/manual/en/html_node/Desktop-Services.html
+   (service screen-locker-service-type
+            (screen-locker-configuration
+             (name "swaylock")
+             (program (file-append swaylock-effects "/bin/swaylock"))
+             (using-pam? #t)
+             (using-setuid? #f)))
    (service bluetooth-service-type
             (bluetooth-configuration
-             (auto-enable? #f)))
+             (auto-enable? #t)))
    (service cups-service-type
             (cups-configuration
              (web-interface? #t)
@@ -104,7 +110,8 @@
 
    (packages (append
 	      (list sway
-		    (list glib "bin"))
+                    swaylock-effects
+                    glibc-locales)
 	      %base-packages))
    
    (services guix-system-services)

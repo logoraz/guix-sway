@@ -1,4 +1,4 @@
-(define module (config home services home-files-alist)
+(define-module (config home services home-files-alist)
   #:use-module (guix gexp)
   #:use-module (srfi srfi-1)
   #:use-module (srfi srfi-26)

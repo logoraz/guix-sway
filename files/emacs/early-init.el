@@ -117,10 +117,8 @@
 (setq frame-resize-pixelwise t)
 
 (setq raz/custom-frame-alist
-      '((alpha-background . 85) ; doesn't work on X11
-        ;;(undecorated . t)
-        ;;(maximized . t)
-        ;; (alpha . (85 . 85))
+      '((alpha-background . 85) ; works only for emacs-pgtk
+        (undecorated . t)
         (use-frame-synchronization . t)))
 
 (setq initial-frame-alist

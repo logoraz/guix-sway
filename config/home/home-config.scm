@@ -21,7 +21,7 @@
 (define %home-path "/home/logoraz/dotfiles/")
 
 (define (home-file dir filename)
-  "Resolve local file."
+  "Resolve local config file."
   (local-file (string-append
                %home-path
                dir "/"

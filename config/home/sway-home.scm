@@ -11,20 +11,14 @@
   :use-module (gnu home services dotfiles)
   :use-module (gnu home services syncthing)
   :use-module (guix gexp)
-  :use-module (guix transformations)
+
+  :use-module (config home services sway-desktop)
+  :use-module (config home services emacs-guile)
+  :use-module (config home services udiskie)
   :use-module (config home services home-files-alist)
-  :use-module (config home services home-impure-symlinks)
-  :use-module (config home services udiskie))
+  :use-module (config home services home-impure-symlinks))
 
 (use-service-modules desktop guix)
-(use-package-modules bootloaders certs gnuzilla emacs emacs-xyz version-control wm
-                     compression curl fonts freedesktop gimp glib gnome gnome-xyz
-                     gstreamer kde-frameworks linux package-management
-                     password-utils pdf pulseaudio shellutils ssh syncthing video
-                     web-browsers wget xdisorg xorg
-
-                     guile guile-xyz sdl gnucash gimp inkscape graphics terminals
-                     image networking qt music)
 
 (define sway-config
   (map
@@ -40,145 +34,11 @@
     "exec emacs"
     "include \"~/.config/sway/after-config\"")))
 
-;;; Package Transformations
-;; Keep for now as an example
-;; deploy in package list as (latest-sbcl sbcl)
-;; (define latest-sbcl
-;;   (options->transformation
-;;    '((with-latest . "sbcl"))))
-
-;;; Packages
-(define guile-packages
-  (list guile-next    ;;|--> gnu packages guile
-        guile-ares-rs ;;|--> gnu packages guile-xyz
-        guile-hoot
-        guile-websocket
-        guile-sdl2 ;;|--> gnu package sdl
-        sdl2))
-
-;;TODO - Better organize & comment
-;; https://github.com/daviwil/dotfiles/blob/master/daviwil/home-services/desktop.scm
-(define sway-packages
-  (list  swaybg
-         swayidle
-         wl-clipboard
-         fuzzel
-         mako
-         grimshot ;; grimshot --notify copy area
-         network-manager-applet
-
-         ;; Compatibility for older Xorg applications
-         xorg-server-xwayland
-
-         ;; XDG Utilities
-         xdg-utils ;; For xdg-open, etc
-         xdg-dbus-proxy
-         shared-mime-info
-         udiskie
-         (list glib "bin")
-
-         ;; Appearance
-         matcha-theme
-         papirus-icon-theme
-         adwaita-icon-theme
-         gnome-themes-extra
-         bibata-cursor-theme
-
-         ;; Fonts
-         font-jetbrains-mono
-         font-liberation
-         font-hack
-         font-fira-code
-         font-iosevka-aile
-         font-google-noto
-         font-google-noto-emoji
-         font-google-noto-sans-cjk
-
-         ;; Browsers
-         icecat
-         qtwayland
-         ;; (specification->package "qtwayland@5")
-         qutebrowser
-
-         ;; Authentication
-         keepassxc
-         password-store
-
-         ;; Audio devices and media playback
-         mpv      ;;|--> gnu packages video
-         mpv-mpris
-         youtube-dl
-         playerctl
-         gstreamer
-         gst-plugins-good
-         gst-plugins-bad
-         gst-libav
-         ;; alsa-utils
-         ;; pavucontrol
-         pipewire ;;|--> gnu packages linux
-         wireplumber
-
-         ;; Applications
-         foot     ;;|--> gnu packages terminals
-         gnucash  ;;|--> gnu packages gnucash
-         gimp     ;;|--> gnu packages gimp
-         inkscape ;;|--> gnu packages inkscape
-         blender  ;;|--> gnu packages graphics
-
-         ;; General utilities
-         lm-sensors
-         blueman ;;|--> gnu packages networkings
-         bluez
-         brightnessctl
-         git
-         (list git "send-email")
-         curl
-         wget
-         openssh
-         zip
-         unzip
-         trash-cli))
-
-(define emacs-packages
-  (list  emacs-pgtk ;;|--> gnu packages emacs
-         emacs-diminish  ;;|--> gnu packages emacs-xyz
-         emacs-delight
-         emacs-nord-theme
-         emacs-doom-themes
-         emacs-nerd-icons
-         emacs-doom-modeline
-         emacs-ligature
-         emacs-no-littering
-         emacs-ws-butler
-         emacs-undo-tree
-         emacs-paredit
-         emacs-visual-fill-column
-         emacs-ace-window
-         emacs-mct
-         emacs-orderless
-         emacs-corfu
-         emacs-marginalia
-         emacs-beframe
-         emacs-denote
-         emacs-magit
-         emacs-vterm
-         emacs-guix
-         emacs-arei
-         emacs-sly
-         emacs-mbsync
-         emacs-org-superstar
-         emacs-org-appear
-         emacs-erc-hl-nicks
-         emacs-erc-image
-         emacs-emojify))
 
 (define *home-path* "/home/logoraz/dotfiles/")
 
 (define home-config
   (home-environment
-   (packages (append guile-packages
-                     sway-packages
-                     emacs-packages))
 
    (services (list
               ;; Enable pipewire audio
@@ -272,6 +132,13 @@
               (service home-batsignal-service-type)
 
               ;; Udiskie for auto-mounting
-              (service home-udiskie-service-type)))))
+              (service home-udiskie-service-type)
+
+              ;; Emacs configuration
+              (service home-emacs-config-service-type)
+
+              ;; Sway Desktop configuration
+              (service home-sway-desktop-service-type)))))
+
 
 home-config

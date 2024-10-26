@@ -37,26 +37,31 @@
 
 (define guix-system-services
   (cons*
-   ;; See: https://guix.gnu.org/manual/en/html_node/Desktop-Services.html
+   ;; Configure gdm-service for wayland -> move wayland to home?
+   ;; https://guix.gnu.org/manual/en/html_node/X-Window.html
    (service screen-locker-service-type
             (screen-locker-configuration
              (name "swaylock")
              (program (file-append swaylock-effects "/bin/swaylock"))
              (using-pam? #t)
              (using-setuid? #f)))
+
    (service bluetooth-service-type
             (bluetooth-configuration
              (auto-enable? #t)))
+
    (service cups-service-type
             (cups-configuration
              (web-interface? #t)
              (default-paper-size "Letter")
              (extensions (list cups-filters hplip-minimal))))
+
    ;; ssh user@host -p 2222
    (service openssh-service-type
             (openssh-configuration
              (openssh openssh)
              (port-number 2222)))
+   ;; See: https://guix.gnu.org/manual/en/html_node/Desktop-Services.html
    (modify-services %desktop-services
                     (guix-service-type
                      config =>

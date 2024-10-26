@@ -39,6 +39,7 @@
   #:use-module (guix monads)
   #:use-module (guix store)
   #:use-module (srfi srfi-1)
+
   #:export (home-impure-symlinks-service-type))
 
 (define (compute-impure-symlinks-file init-symlinks symlinks)

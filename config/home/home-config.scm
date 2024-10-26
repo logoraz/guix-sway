@@ -1,38 +1,24 @@
-(define-module (config home sway-home)
-  :use-module (gnu)
-  :use-module (gnu home)
-  :use-module (gnu home services)
-  :use-module (gnu home services pm)
-  :use-module (gnu home services gnupg)
-  :use-module (gnu home services mcron)
-  :use-module (gnu home services shells)
-  :use-module (gnu home services sound)
-  :use-module (gnu home services desktop)
-  :use-module (gnu home services dotfiles)
-  :use-module (gnu home services syncthing)
-  :use-module (guix gexp)
+(define-module (config home home-config)
+  #:use-module (gnu)
+  #:use-module (gnu home)
+  #:use-module (gnu home services)
+  #:use-module (gnu home services pm)
+  #:use-module (gnu home services gnupg)
+  #:use-module (gnu home services mcron)
+  #:use-module (gnu home services shells)
+  #:use-module (gnu home services sound)
+  #:use-module (gnu home services desktop)
+  #:use-module (gnu home services dotfiles)
+  #:use-module (gnu home services syncthing)
+  #:use-module (gnu home services guix)
 
-  :use-module (config home services sway-desktop)
-  :use-module (config home services emacs-guile)
-  :use-module (config home services udiskie)
-  :use-module (config home services home-files-alist)
-  :use-module (config home services home-impure-symlinks))
+  #:use-module (guix gexp)
 
-(use-service-modules desktop guix)
-
-(define sway-config
-  (map
-   (lambda (str)
-     (string-append str "\n"))
-   (list
-    "set $mod Mod4"
-    "include \"~/.config/sway/before-config\""
-    "bindsym $mod+space exec fuzzel -w 50 -x 8 -y 8 -r 3 -b 232635ff -t A6Accdff -s A6Accdff -S 232635ff -C c792eacc -m c792eacc -f \"JetBrains Mono:weight=light:size=10\""
-    "exec mako --border-radius=2 --font=\"JetBrains Mono 8\" --max-visible=5 --outer-margin=5 --margin=3 --background=\"#1c1f26\" --border-color=\"#89AAEB\" --border-size=1 --default-timeout=7000"
-    "output \"*\" bg ~/Pictures/wallpapers/sunset-mountain.jpg fill"
-    "exec nm-applet --indicator"
-    "exec emacs"
-    "include \"~/.config/sway/after-config\"")))
+  #:use-module (config home services sway-desktop)
+  #:use-module (config home services emacs-guile)
+  #:use-module (config home services udiskie)
+  #:use-module (config home services home-files-alist)
+  #:use-module (config home services home-impure-symlinks))
 
 
 (define *home-path* "/home/logoraz/dotfiles/")
@@ -47,9 +33,7 @@
               ;; Enable bluetooth connections
               (service home-dbus-service-type)
 
-              ;; (service home-xdg-configuration-files-service-type
-              ;;          `(("sway/config" ,(apply mixed-text-file (cons "sway-config" sway-config)))))
-
+              ;; XDG files configuration
               (simple-service 'home-impure-symlinks-dotfiles
                               home-impure-symlinks-service-type
                               `( ;; Guix Configuration

@@ -5,14 +5,8 @@
   #:use-module (ice-9 ftw)
   #:use-module (ice-9 string-fun)
   #:use-module (ice-9 regex)
-  #:export (home-files-alist-create-from-dirs))
 
-;; (use-modules (guix gexp)
-;;              (srfi srfi-1)
-;;              (srfi srfi-26)
-;;              (ice-9 ftw)
-;;              (ice-9 string-fun)
-;;              (ice-9 regex))
+  #:export (home-files-alist-create-from-dirs))
 
 (define %current-dir (dirname (current-filename)))
 (define isrootre (make-regexp "^\\/"))

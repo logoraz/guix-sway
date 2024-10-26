@@ -16,12 +16,16 @@
 
   #:use-module (config home services sway-desktop)
   #:use-module (config home services emacs-guile)
-  #:use-module (config home services udiskie)
-  #:use-module (config home services home-files-alist)
-  #:use-module (config home services home-impure-symlinks))
+  #:use-module (config home services udiskie))
 
+(define %home-path "/home/logoraz/dotfiles/")
 
-(define *home-path* "/home/logoraz/dotfiles/")
+(define (home-file dir filename)
+  "Resolve local file."
+  (local-file (string-append
+               %home-path
+               dir "/"
+               filename)))
 
 (define home-config
   (home-environment
@@ -34,41 +38,41 @@
               (service home-dbus-service-type)
 
               ;; XDG files configuration
-              (simple-service 'home-impure-symlinks-dotfiles
-                              home-impure-symlinks-service-type
-                              `( ;; Guix Configuration
-                                (".config/guix/channels.scm"
-                                 ,(string-append
-                                   *home-path*
-                                   "config/system/channels.scm"))
-                                ;; Sway Configuration
-                                (".config/sway"
-                                 ,(string-append
-                                   *home-path*
-                                   "files/sway"))
-                                (".config/gtk-3.0/settings.ini"
-                                 ,(string-append
-                                   *home-path*
-                                   "files/gtk-3.0/settings.ini"))
-                                (".config/yambar"
-                                 ,(string-append
-                                   *home-path*
-                                   "files/yambar"))
-                                ;; qutebrowser Configuration
-                                (".config/qutebrowser"
-                                 ,(string-append
-                                   *home-path*
-                                   "files/qutebrowser"))
-                                ;; Emacs Configuration
-                                (".config/emacs"
-                                 ,(string-append
-                                   *home-path*
-                                   "files/emacs"))
-                                ;; Foot Configuration
-                                (".config/foot"
-                                 ,(string-append
-                                   *home-path*
-                                   "files/foot"))))
+              (service home-xdg-configuration-files-service-type
+                       `(("sway/config"
+                          ,(home-file "files/sway" "config"))
+                         ("sway/status.sh"
+                          ,(home-file "files/sway" "status.sh"))
+                         ("gtk-3.0/settings.ini"
+                          ,(home-file "files/gtk-3.0" "settings.ini"))
+                         ("foot/foot.ini"
+                          ,(home-file "files/foot" "foot.ini"))
+                         ("emacs/early-init.el"
+                          ,(home-file "files/emacs" "early-init.el"))
+                         ("emacs/init.el"
+                          ,(home-file "files/emacs" "init.el"))
+                         ("emacs/modules/raz-base-core.el"
+                          ,(home-file "files/emacs/modules" "raz-base-core.el"))
+                         ("emacs/modules/raz-base-ext.el"
+                          ,(home-file "files/emacs/modules" "raz-base-ext.el"))
+                         ("emacs/modules/raz-completions-mct.el"
+                          ,(home-file "files/emacs/modules" "raz-completions-mct.el"))
+                         ("emacs/modules/raz-denote.el"
+                          ,(home-file "files/emacs/modules" "raz-denote.el"))
+                         ("emacs/modules/raz-erc.el"
+                          ,(home-file "files/emacs/modules" "raz-erc.el"))
+                         ("emacs/modules/raz-guile-ide.el"
+                          ,(home-file "files/emacs/modules" "raz-guile-ide.el"))
+                         ("emacs/modules/raz-lisp-ide.el"
+                          ,(home-file "files/emacs/modules" "raz-lisp-ide.el"))
+                         ("emacs/modules/raz-org.el"
+                          ,(home-file "files/emacs/modules" "raz-org.el"))
+                         ("emacs/elisp/raz-subrx.el"
+                          ,(home-file "files/emacs/elisp" "raz-subrx.el"))
+                         ("qutebrowser/config.py"
+                          ,(home-file "files/qutebrowser" "config.py"))
+                         ("qutebrowser/quteconfig.py"
+                          ,(home-file "files/qutebrowser" "quteconfig.py"))))
 
               ;; Set environment variables for every session
               (simple-service 'profile-env-vars-service

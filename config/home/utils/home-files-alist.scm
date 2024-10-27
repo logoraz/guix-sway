@@ -1,23 +1,24 @@
-(define-module (config home services home-files-alist)
+(define-module (config home utils home-files-alist)
   #:use-module (guix gexp)
   #:use-module (srfi srfi-1)
   #:use-module (srfi srfi-26)
+  #:use-module (ice-9 format)
   #:use-module (ice-9 ftw)
   #:use-module (ice-9 string-fun)
   #:use-module (ice-9 regex)
-
-  #:export (home-files-alist-create-from-dirs))
+  #:use-module (ice-9 optargs)
+  #:export (home-file-dirs->alists))
 
 (define %current-dir (dirname (current-filename)))
-(define isrootre (make-regexp "^\\/"))
-(define isdotre (make-regexp "^\\.\\.?"))
-(define istmpre (make-regexp "~$"))
+(define root-re (make-regexp "^\\/"))
+(define dot-re (make-regexp "^\\.\\.?"))
+(define tmp-re (make-regexp "~$"))
 
 (define (path-join . args)
   (string-join args file-name-separator-string))
 
 (define (path-expand path)
-  (if (regexp-exec isrootre path)
+  (if (regexp-exec root-re path)
       path (path-join %current-dir path)))
 
 (define (path-diff path-sub path-full)
@@ -27,24 +28,24 @@
                         file-name-separator-string)))
     (string-replace-substring path-full path-sub-and-slash "")))
 
-(define (isnotdotortmpstr? str)
-  (and (not (regexp-exec isdotre str))
-       (not (regexp-exec istmpre str))))
+(define (not-tmp-or-dot? str)
+  (and (not (regexp-exec dot-re str))
+       (not (regexp-exec tmp-re str))))
 
-(define (list-recursive pathOrDir . files)
-  (let ((filestat (stat pathOrDir)))
+(define (list-recursive path-or-dir . files)
+  (let ((filestat (stat path-or-dir)))
     (cond ((eq? (stat:type filestat) 'directory)
            (fold (lambda (str prev)
                    (append prev
                            (list-recursive
-                            (path-join pathOrDir str))))
+                            (path-join path-or-dir str))))
                  files
-                 (scandir pathOrDir isnotdotortmpstr?)))
+                 (scandir path-or-dir not-tmp-or-dot?)))
           ((eq? (stat:type filestat) 'regular)
-           (cons pathOrDir files))
+           (cons path-or-dir files))
           (else files))))
 
-(define (home-files-list-create-from-dir source home-lists)
+(define (home-file-dir->list source home-lists)
   (let ((files (list-recursive source)))
     (fold (lambda (path-to prev)
             (let ((path-full (path-expand path-to)))
@@ -54,8 +55,8 @@
           home-lists
           files)))
 
-(define (home-files-alist-create-from-dirs sources . alists)
+(define* (home-file-dirs->alists sources #:key (alist '()))
   (fold (lambda (source prev)
-          (home-files-list-create-from-dir source prev))
-        alists
+          (home-file-dir->list source prev))
+        alist
         sources))

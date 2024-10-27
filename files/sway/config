@@ -17,7 +17,7 @@ set $mod Mod4
 # output HDMI-A-1 scale 2
 
 # Set Background
-output "*" bg ~/.dotfiles/assets/wallpapers/sunset-mountain.jpg fill
+output "*" bg ~/.dotfiles/files/assets/wallpapers/sunset-mountain.jpg fill
 
 # Toggle Displays
 # bindsym $mod+Shift+s exec ~/.config/sway/bin/toggle-display $primary
@@ -170,6 +170,7 @@ seat * xcursor_theme Bibata-Original-Classic 16
 exec gsettings set org.gnome.desktop.interface gtk-theme "Adwaita-dark"
 exec gsettings set org.gnome.desktop.interface icon-theme "Papirus-Dark"
 exec gsettings set org.gnome.desktop.interface font-name "Iosevka Aile 11"
+# Not working as I would like, still need to define a gtk-3.0/settings.ini file.
 exec gsettings set org.gnome.desktop.interface cursor-theme "Bibata-Original-Classic"
 exec gsettings set org.gnome.desktop.interface cursor-size 16
 
@@ -192,28 +193,3 @@ bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. 
 
 
 #include "~/.config/sway/after-config"
-
-#
-# Obsolescent
-#
-
-#exec_always autotiling
-
-# cleans up window appearance
-#xwayland disable
-
-#output * scale 2
-#hide_edge_borders smart
-#default_border none
-
-#set $bgcolor #232635dd
-
-#
-# Status Bar:
-#
-# exec_always sleep 3 && sh -c "killall yambar; yambar &"
-
-# exec swayidle -w \
-#   timeout 300 'swaylock -f --screenshots --clock --effect-blur 9x7 --effect-vignette 0.25:0.5 --grace 60 --fade-in 0.25' \
-#   timeout 600 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
-#   before-sleep 'swaylock -f --screenshots --clock --effect-blur 9x7 --effect-vignette 0.25:0.5 --grace 60 --fade-in 0.25'

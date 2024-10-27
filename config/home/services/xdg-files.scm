@@ -38,6 +38,8 @@
      ,(home-file "files/qutebrowser" "quteconfig.py"))
 
     ;; Emacs Configuration Files
+    ;; TODO: Put Emacs configuration as a package channel so I don't have to deal with
+    ;;       it here!
     ("emacs/early-init.el"
      ,(home-file "files/emacs" "early-init.el"))
     ("emacs/init.el"

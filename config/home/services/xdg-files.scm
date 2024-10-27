@@ -24,8 +24,8 @@
     ;;  ,(home-file "files/sway/bin" "toggle-display.sh"))
 
     ;; GTK configuration
-    ;; ("gtk-3.0/settings.ini"
-    ;;  ,(home-file "files/gtk-3.0" "settings.ini"))
+    ("gtk-3.0/settings.ini"
+     ,(home-file "files/gtk-3.0" "settings.ini"))
 
     ;; Terminal configuration
     ("foot/foot.ini"

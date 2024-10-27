@@ -87,10 +87,10 @@
          font-google-noto-sans-cjk
 
          ;; Browsers
-         icecat
+         qutebrowser
          qtwayland
          ;; (specification->package "qtwayland@5")
-         qutebrowser
+         icecat ;;staged for removal
 
          ;; Authentication
          keepassxc

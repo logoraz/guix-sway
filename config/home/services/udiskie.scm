@@ -1,4 +1,3 @@
-;; Borrowed from daviwil
 (define-module (config home services udiskie)
   #:use-module (gnu services)
   #:use-module (gnu home services)

@@ -5,7 +5,7 @@
   #:use-module (gnu home services dotfiles)
   #:export (home-xdg-local-files-service-type))
 
-(define %home-path "/home/logoraz/dotfiles/")
+(define %home-path "/home/logoraz/.dotfiles/")
 
 (define (home-file dir filename)
   "Resolve local config file."

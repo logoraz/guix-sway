@@ -15,14 +15,19 @@
                filename)))
 
 (define (home-xdg-local-files-list-service config)
-  `(("sway/config"
+  `(;; Sway configuration files
+    ("sway/config"
      ,(home-file "files/sway" "config"))
-    ("sway/status.sh"
-     ,(home-file "files/sway" "status.sh"))
+    ("sway/bin/status.sh"
+     ,(home-file "files/sway/bin" "status.sh"))
+    ;; ("sway/bin/toggle-display.sh"
+    ;;  ,(home-file "files/sway/bin" "toggle-display.sh"))
 
     ;; GTK configuration
-    ("gtk-3.0/settings.ini"
-     ,(home-file "files/gtk-3.0" "settings.ini"))
+    ;; ("gtk-3.0/settings.ini"
+    ;;  ,(home-file "files/gtk-3.0" "settings.ini"))
+
+    ;; Terminal configuration
     ("foot/foot.ini"
      ,(home-file "files/foot" "foot.ini"))
 

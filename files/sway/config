@@ -26,6 +26,7 @@ input type:keyboard {
     # xkb_options ctrl:nocaps
 }
 
+# Set system font
 font pango:JetBrains Mono 12
 
 # Use Mouse+$mod to drag floating windows to their wanted position

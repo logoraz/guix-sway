@@ -14,8 +14,14 @@
                dir "/"
                filename)))
 
+(define (resolve-path path base-path)
+  (canonicalize-path
+   (if (absolute-file-name? path)
+       path
+       (string-append base-path "/" path))))
+
 (define (home-xdg-local-files-list-service config)
-  `(;; Sway configuration files
+  `( ;; Sway configuration files
     ("sway/config"
      ,(home-file "files/sway" "config"))
     ("sway/bin/status.sh"
@@ -71,3 +77,8 @@
                         home-xdg-configuration-files-service-type
                         home-xdg-local-files-list-service)))
                 (default-value #f)))
+
+
+;; TODO - use define-configuration to create a better suited configuration interface using
+;; the functionality of iambumblehead's home-alist.scm to provide a clean interface for users
+;; to define xdg-local files to be symlinked into the XDG_HOME_DIR.

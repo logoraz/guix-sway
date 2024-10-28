@@ -21,7 +21,11 @@
        (string-append base-path "/" path))))
 
 (define (home-xdg-local-files-list-service config)
-  `( ;; Sway configuration files
+  `(;; Guix Configuration Channels
+    ("guix/channels.scm"
+     ,(home-file "config/system" "channels.scm"))
+
+    ;; Sway configuration files
     ("sway/config"
      ,(home-file "files/sway" "config"))
     ("sway/bin/status.sh"

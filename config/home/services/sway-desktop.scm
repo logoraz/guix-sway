@@ -58,6 +58,7 @@
          mako
          grimshot ;; grimshot --notify copy area
          network-manager-applet
+         libinput
 
          ;; Compatibility for older Xorg applications
          xorg-server-xwayland

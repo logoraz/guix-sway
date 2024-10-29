@@ -91,11 +91,14 @@ c.bindings.commands['normal'] = {
     '<ctrl-x>1': 'tab-only;;message-info "cleared all other tabs"',
     '<ctrl-x><ctrl-c>': 'quit',
 
-	# searching
+    # Navigation extra
+    '<ctrl-c>r': 'reload',
+
+    # searching
     '<ctrl-s>': 'cmd-set-text /',
     '<ctrl-r>': 'cmd-set-text ?',
 
-	# hinting
+    # hinting
     '<alt-s>': 'hint all',
 
     # tabs
@@ -141,9 +144,11 @@ c.bindings.commands['normal'] = {
     '9': 'fake-key 9',
     '0': 'fake-key 0',
 
-	# escape hatch
+    # escape hatch
     '<ctrl-h>': 'cmd-set-text -s :help',
     '<ctrl-g>': ESC_BIND,
+
+    # othrer extras
 }
 
 c.bindings.commands['command'] = {
@@ -182,4 +187,4 @@ c.url.searchengines = {
 c.editor.command = ["emacsclient", "-c", "{file}"]
 
 # Reload config
-config.bind("<Ctrl-x><Ctrl-l>", "config-source")
+c.bind("<Ctrl-x><Ctrl-l>", "config-source")

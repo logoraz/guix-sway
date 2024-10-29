@@ -99,7 +99,7 @@ c.bindings.commands['normal'] = {
     '<alt-s>': 'hint all',
 
     # tabs
-    '<ctrl-t>': 'tab-clone'
+    '<ctrl-t>': 'tab-clone',
     '<ctrl-tab>': 'tab-next',
     '<ctrl-shift-tab>': 'tab-prev',
 

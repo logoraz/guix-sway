@@ -28,8 +28,10 @@
     ;; Sway configuration files
     ("sway/config"
      ,(home-file "files/sway" "config"))
+
     ("sway/bin/status.sh"
      ,(home-file "files/sway/bin" "status.sh"))
+
     ;; ("sway/bin/toggle-display.sh"
     ;;  ,(home-file "files/sway/bin" "toggle-display.sh"))
 
@@ -44,32 +46,46 @@
     ;; qutebrowser Configuration Files
     ("qutebrowser/config.py"
      ,(home-file "files/qutebrowser" "config.py"))
+
     ("qutebrowser/quteconfig.py"
      ,(home-file "files/qutebrowser" "quteconfig.py"))
+
+    ("qutebrowser/qutemacs.py"
+     ,(home-file "files/qutebrowser" "qutemacs.py"))
 
     ;; Emacs Configuration Files
     ;; TODO: Put Emacs configuration as a package channel so I don't have to deal with
     ;;       it here!
     ("emacs/early-init.el"
      ,(home-file "files/emacs" "early-init.el"))
+
     ("emacs/init.el"
      ,(home-file "files/emacs" "init.el"))
+
     ("emacs/elisp/raz-subrx.el"
      ,(home-file "files/emacs/elisp" "raz-subrx.el"))
+
     ("emacs/modules/raz-base-core.el"
      ,(home-file "files/emacs/modules" "raz-base-core.el"))
+
     ("emacs/modules/raz-base-ext.el"
      ,(home-file "files/emacs/modules" "raz-base-ext.el"))
+
     ("emacs/modules/raz-completions-mct.el"
      ,(home-file "files/emacs/modules" "raz-completions-mct.el"))
+
     ("emacs/modules/raz-denote.el"
      ,(home-file "files/emacs/modules" "raz-denote.el"))
+
     ("emacs/modules/raz-erc.el"
      ,(home-file "files/emacs/modules" "raz-erc.el"))
+
     ("emacs/modules/raz-guile-ide.el"
      ,(home-file "files/emacs/modules" "raz-guile-ide.el"))
+
     ("emacs/modules/raz-lisp-ide.el"
      ,(home-file "files/emacs/modules" "raz-lisp-ide.el"))
+
     ("emacs/modules/raz-org.el"
      ,(home-file "files/emacs/modules" "raz-org.el"))))
 

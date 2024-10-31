@@ -29,4 +29,4 @@ config.bind('<Ctrl-g>', 'leave-mode', mode='hint')
 config.load_autoconfig()
 
 # Load qutemacs file (qutemacs.py) for Emacs Keybindings.
-config.source('qutemacs.py')
+#config.source('qutemacs.py')

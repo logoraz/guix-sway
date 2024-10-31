@@ -16,7 +16,7 @@
 
 
 (define (home-emacs-config-profile-service config)
-  (list  emacs-pgtk ;;|--> gnu packages emacs
+  (list  ;; emacs-pgtk ;;|--> gnu packages emacs
          emacs-diminish  ;;|--> gnu packages emacs-xyz
          emacs-delight
          emacs-nord-theme

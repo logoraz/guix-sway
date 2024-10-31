@@ -10,6 +10,7 @@
   #:use-module (guix gexp)
   #:use-module (config home services sway-desktop)
   #:use-module (config home services emacs-guile)
+  #:use-module (config home services raz-emacs)
   #:use-module (config home services xdg-files)
   #:use-module (config home services environment)
   #:use-module (config home services udiskie))
@@ -40,8 +41,11 @@
               ;; Udiskie for auto-mounting
               (service home-udiskie-service-type)
 
-              ;; Emacs profile configuration
+              ;; Raz Emacs Package profile configuration
               (service home-emacs-config-service-type)
+
+              ;; Raz Emacs Configuration
+              (service home-raz-emacs-service-type)
 
               ;; Sway Desktop profile configuration
               (service home-sway-desktop-service-type)

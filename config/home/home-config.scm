@@ -32,6 +32,7 @@
               ;; Set environment variables for every session
               (service home-env-vars-configuration-service-type)
 
+              ;; TODO - learn what this does! and if needed
               ;; File synchronization
               ;; (service home-syncthing-service-type)
 
@@ -65,5 +66,5 @@
                          (list (local-file "dot-bash_profile.sh"
                                            #:recursive? #t)))))))))
 
-;; Instantiated home configuration
+;; Instantiate home configuration
 home-config

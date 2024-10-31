@@ -6,6 +6,10 @@
   #:use-module ((guix licenses) #:prefix license:))
 
 ;;TODO - doesn't work when exported, only with define-public... why?
+
+;;Note: generate new sha256/base32 via
+;; guix hash -x --serializer=nar .
+;; Get commit via git log
 (define-public raz-emacs
   (package
    (name "raz-emacs")
@@ -14,10 +18,10 @@
             (method git-fetch)
             (uri (git-reference
                   (url "https://github.com/logoraz/raz-emacs/")
-                  (commit "22031518da108667abd938351b1fbaf8d9720f72")))
+                  (commit "a5cd2c0b862113f83f6ef6e31905509a9fc2c7a6")))
             (sha256
              (base32
-              "16y409s5nqmnk9lxy46rf8nkrl349rw1imhmjja49mx5ww8gvwzx"))))
+              "0njdf5xxx7bp22pk389hh7vw14n870d5rnmzs6vxc06drc586ygr"))))
    (build-system copy-build-system)
    (home-page "https://github.com/logoraz/raz-emacs")
    (synopsis "Raz Emacs")

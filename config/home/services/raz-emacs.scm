@@ -13,11 +13,16 @@
 
   #:export (home-raz-emacs-service-type
             home-raz-emacs-configuration))
+;;;
+;;; TODO: using until `home-emacs-service-type' makes it upstream in Guix!!
+;;;       or generalize configuration so user can pull their own emacs configuration.
+;;; Ref: https://issues.guix.gnu.org/60753
+;;;
 
 (define-configuration home-raz-emacs-configuration
   (package
-    (package raz-emacs)
-    "The Raz Emacs package to use.")
+   (package raz-emacs)
+   "The Raz Emacs package to use.")
   (emacs-package
    (package emacs-pgtk)
    "The Emacs package to use."))

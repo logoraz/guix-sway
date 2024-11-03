@@ -9,6 +9,7 @@
 
 ;;Note: generate new sha256/base32 via
 ;; guix hash -x --serializer=nar .
+;; guix hash -x --serializer=git .
 ;; Get commit via git log
 (define-public raz-emacs
   (package
@@ -17,13 +18,14 @@
    (source (origin
             (method git-fetch)
             (uri (git-reference
-                  (url "https://codeberg.org/loraz/raz-emacs.git")
-                  (commit "b6f7d5ec0d2550d4441cc853a1ff26c271e3658783c8a143cd7c34e42db841fb")))
-            (sha256
-             (base32
-              "0bn67gnvyhfzqhszixahnn6vs2cpljwhhqjazj6wfi3vi4bpaqvs"))))
+                  (url "https://codeberg.org/loraz/raz-emacs")
+                  (commit "234f2d366476b02a7e27ca0a776db474cda679cb")))
+            (hash
+             (content-hash
+              "1zlwd1ipr1ag16vsws4xnbcqgwaqm55byscj8rb291ypp9yzp2yz"
+              sha256))))
    (build-system copy-build-system)
-   (home-page "https://github.com/logoraz/raz-emacs")
+   (home-page "https://codeberg.org/loraz/raz-emacs")
    (synopsis "Raz Emacs")
    (description "Raz Emacs")
    (license license:agpl3+)))

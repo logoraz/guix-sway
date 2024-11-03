@@ -17,11 +17,11 @@
    (source (origin
             (method git-fetch)
             (uri (git-reference
-                  (url "https://github.com/logoraz/raz-emacs/")
-                  (commit "a5cd2c0b862113f83f6ef6e31905509a9fc2c7a6")))
+                  (url "https://codeberg.org/loraz/raz-emacs.git")
+                  (commit "b6f7d5ec0d2550d4441cc853a1ff26c271e3658783c8a143cd7c34e42db841fb")))
             (sha256
              (base32
-              "0njdf5xxx7bp22pk389hh7vw14n870d5rnmzs6vxc06drc586ygr"))))
+              "0bn67gnvyhfzqhszixahnn6vs2cpljwhhqjazj6wfi3vi4bpaqvs"))))
    (build-system copy-build-system)
    (home-page "https://github.com/logoraz/raz-emacs")
    (synopsis "Raz Emacs")
